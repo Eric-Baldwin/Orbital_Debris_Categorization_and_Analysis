@@ -1,1 +1,3 @@
-# ddi_capstone_2
+# Orbital Object Classification and Analysis
+
+The dataset contains information about various space objects, such as their type (e.g., payload, debris), physical characteristics, and orbital parameters. I employed methods including data preprocessing, feature engineering, logistic regression modeling, and hypothesis testing to compare the performance of logistic regression with and without polynomial features.
