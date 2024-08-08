@@ -6,13 +6,12 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from imblearn.over_sampling import SMOTE
-
+import pickle
 
 def load_data(file_path):
-    df = pd.read_csv('/home/eric_baldwin/ddiMain/capstone/ddi_capstone_2/data/space_decay.csv')
+    df = pd.read_csv(file_path)
     print("Data loaded successfully.")
     return df
-
 
 def preprocess_data(df):
     # Drop unnecessary columns
@@ -62,13 +61,11 @@ def preprocess_data(df):
 
     return X, y
 
-
 def add_polynomial_features(X, degree=2):
     poly = PolynomialFeatures(degree=degree, include_bias=False)
     X_poly = poly.fit_transform(X)
     print("Added polynomial features.")
     return X_poly
-
 
 def standardize_features(X):
     scaler = StandardScaler()
@@ -76,13 +73,11 @@ def standardize_features(X):
     print("Standardized features.")
     return X_standardized
 
-
 def handle_class_imbalance(X, y):
     smote = SMOTE(random_state=42)
     X_resampled, y_resampled = smote.fit_resample(X, y)
     print("Handled class imbalance using SMOTE.")
     return X_resampled, y_resampled
-
 
 def split_data(X, y, test_size=0.3, random_state=42):
     X_train, X_test, y_train, y_test = train_test_split(
@@ -90,12 +85,10 @@ def split_data(X, y, test_size=0.3, random_state=42):
     print("Split data into training and test sets.")
     return X_train, X_test, y_train, y_test
 
-
 def define_model(max_iter=1000, class_weight='balanced'):
     logreg = LogisticRegression(max_iter=max_iter, class_weight=class_weight)
     print("Defined the Logistic Regression model.")
     return logreg
-
 
 def tune_hyperparameters(model, X_train, y_train):
     param_grid = {
@@ -107,12 +100,10 @@ def tune_hyperparameters(model, X_train, y_train):
     print("Completed grid search for hyperparameter tuning.")
     return grid_search
 
-
 def evaluate_model(best_model, X_test, y_test):
     y_pred_logreg = best_model.predict(X_test)
     print("Logistic Regression Classification Report:")
     print(classification_report(y_test, y_pred_logreg))
-
 
 def main():
     file_path = '/home/eric_baldwin/ddiMain/capstone/ddi_capstone_2/data/space_decay.csv'
@@ -134,6 +125,10 @@ def main():
     evaluate_model(best_logreg, X_test, y_test)
     print("Best Hyperparameters:", grid_search.best_params_)
 
+    # Save the best model
+    with open('best_logreg_model.pkl', 'wb') as f:
+        pickle.dump(best_logreg, f)
+    print("Model saved as best_logreg_model.pkl")
 
 if __name__ == "__main__":
     main()
