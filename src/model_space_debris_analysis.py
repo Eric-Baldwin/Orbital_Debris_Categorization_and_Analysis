@@ -65,13 +65,13 @@ def add_polynomial_features(X, degree=2):
     poly = PolynomialFeatures(degree=degree, include_bias=False)
     X_poly = poly.fit_transform(X)
     print("Added polynomial features.")
-    return X_poly
+    return X_poly, poly
 
 def standardize_features(X):
     scaler = StandardScaler()
     X_standardized = scaler.fit_transform(X)
     print("Standardized features.")
-    return X_standardized
+    return X_standardized, scaler
 
 def handle_class_imbalance(X, y):
     smote = SMOTE(random_state=42)
@@ -110,8 +110,8 @@ def main():
     df = load_data(file_path)
 
     X, y = preprocess_data(df)
-    X_poly = add_polynomial_features(X)
-    X_standardized = standardize_features(X_poly)
+    X_poly, poly_transformer = add_polynomial_features(X)
+    X_standardized, scaler = standardize_features(X_poly)
     X_resampled, y_resampled = handle_class_imbalance(X_standardized, y)
 
     X_train, X_test, y_train, y_test = split_data(X_resampled, y_resampled)
@@ -126,9 +126,18 @@ def main():
     print("Best Hyperparameters:", grid_search.best_params_)
 
     # Save the best model
-    with open('best_logreg_model.pkl', 'wb') as f:
+    with open('src/best_logreg_model.pkl', 'wb') as f:
         pickle.dump(best_logreg, f)
     print("Model saved as best_logreg_model.pkl")
+
+    # Save the polynomial features transformer and scaler
+    with open('src/poly_transformer.pkl', 'wb') as f:
+        pickle.dump(poly_transformer, f)
+    print("Polynomial transformer saved as poly_transformer.pkl")
+
+    with open('src/scaler.pkl', 'wb') as f:
+        pickle.dump(scaler, f)
+    print("Scaler saved as scaler.pkl")
 
 if __name__ == "__main__":
     main()
