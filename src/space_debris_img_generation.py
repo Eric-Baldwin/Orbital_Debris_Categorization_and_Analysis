@@ -1,5 +1,3 @@
-# src/space_debris_img_generation.py
-
 import os
 import pandas as pd
 import numpy as np
@@ -114,7 +112,7 @@ def generate_precision_recall_curve(model, X_test, y_test, file_path='img/precis
 
 
 def main():
-    # Load your data
+    # Load data
     file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'space_decay.csv'))
     try:
         df = pd.read_csv(file_path)
@@ -123,7 +121,7 @@ def main():
         print(f"File not found: {file_path}")
         return
 
-    # Preprocess your data
+    # Preprocess data
     df = df.drop(labels=['DECAY_DATE'], axis=1)
     df['OBJECT_TYPE'] = df['OBJECT_TYPE'].replace({'DEBRIS': 'Debris', 'PAYLOAD': 'Payload', 'TBA': 'Unknown', 'ROCKET BODY': 'Rocket'})
     df['COUNTRY_CODE'] = df['COUNTRY_CODE'].replace(to_replace={'TBD': 'Unknown', np.nan: 'Unknown'})

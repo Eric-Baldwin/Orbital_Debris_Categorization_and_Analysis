@@ -26,7 +26,7 @@ class PredictionRequest(BaseModel):
     semimajor_axis: float
     apoapsis: float
     periapsis: float
-    rcs_size: int  # New field for RCS_SIZE
+    rcs_size: int
 
 class PredictionResponse(BaseModel):
     object_type: str
